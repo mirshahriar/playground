@@ -13,8 +13,22 @@ func TestGORM(t *testing.T) {
 
 	DB.Create(&user)
 
-	var result User
-	if err := DB.First(&result, user.ID).Error; err != nil {
+	var result []User
+
+	// Panic for custom scanner
+	if err := DB.Find(&result).Error; err != nil {
 		t.Errorf("Failed, got error: %v", err)
 	}
+
+	// The following one is also a panic
+
+	//if err := DB.Where("1 = 1").Find(&result).Error; err != nil {
+	//	t.Errorf("Failed, got error: %v", err)
+	//}
+
+	// The following one is working fine.
+
+	//if err := DB.Where("1 = ?", 1).Find(&result).Error; err != nil {
+	//	t.Errorf("Failed, got error: %v", err)
+	//}
 }
